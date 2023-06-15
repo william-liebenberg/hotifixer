@@ -50,6 +50,7 @@ jobs:
               id: cpr
               uses: peter-evans/create-pull-request@v5
               with:
+                token: ${{ secrets.GH_PAT }}
                 draft: false
                 delete-branch: true
             - name: Check outputs
