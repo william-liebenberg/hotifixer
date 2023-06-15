@@ -15,9 +15,10 @@ jobs:
             BRANCH: ${{ github.head_ref }}
         steps:
             - run: |
-                $branchName = $env.BRANCH;
+                $branchName = $env:BRANCH;
+                Write-host "Your branch is $($branchName)..."
                 if(-not($branchName.StartsWith('hotfix/','CurrentCultureIgnoreCase'))) {
-                    Write-Host "Your branch '$($branchName)' must start with 'hotfix/'";
+                    Write-Host "Cannot start the Hotfix process - your branch must start with 'hotfix/'";
                     exit 1;
                 }
     
