@@ -1,0 +1,37 @@
+name: Hotfix (PP to Prod)
+
+on:
+    workflow_dispatch:
+
+jobs:
+    hotfix-validate:
+        if: startsWith(github.head_ref, 'hotfix/')
+        runs-on: ubuntu-latest
+        steps:
+            - run: echo "Ensuring that you are following the hotfix process..."
+    
+    build:
+        uses: ./.github/workflows/publish-code.yml
+        secrets: inherit
+
+    unit-test:
+        uses: ./.github/workflows/unit-test.yml
+        secrets: inherit
+
+    pp-deploy:
+        uses: ./.github/workflows/deploy-environment.yml
+        with:
+            environment: pp
+        secrets: inherit
+        needs:
+            - hotfix-validate
+            - build
+            - unit-test
+
+    prod-deploy:
+        uses: ./.github/workflows/deploy-environment.yml
+        with:
+            environment: prod
+        secrets: inherit
+        needs:
+            - pp-deploy

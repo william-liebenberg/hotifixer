@@ -1,0 +1,65 @@
+name: "Deploy-Environment"
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: "Name of the environment to deploy to"
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+  checks: write
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  
+  approval-gate:
+    runs-on: ubuntu-latest
+    environment: "${{ inputs.environment }}-approval"
+    concurrency:
+      cancel-in-progress: true
+      group: ${{ inputs.environment }}-approval
+    steps:
+      - name: approved
+        env: 
+          ENV_NAME: ${{ inputs.environment }}
+        run: write-host "Approve for $($env.ENV_NAME)"
+
+  deploy-ui:
+      concurrency:
+        cancel-in-progress: false
+        group: ${{ inputs.environment }}-deploy-ui
+      uses: ./.github/workflows/deploy-ui.yml
+      with:
+        environment: ${{ inputs.environment }}
+      secrets: inherit
+      needs: 
+        - approval-gate
+        
+  deploy-api:
+    concurrency:
+        cancel-in-progress: false
+        group: ${{ inputs.environment }}-deploy-api
+    uses: ./.github/workflows/deploy-api.yml
+    with:
+        environment: ${{ inputs.environment }}
+    secrets: inherit
+    needs:
+        - approval-gate
+
+  deploy-functions:
+    concurrency:
+        cancel-in-progress: false
+        group: ${{ inputs.environment }}-deploy-function
+    uses: ./.github/workflows/deploy-function.yml
+    with:
+        environment: ${{ inputs.environment }}
+    secrets: inherit
+    needs:
+        - approval-gate
