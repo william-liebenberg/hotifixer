@@ -13,10 +13,12 @@ jobs:
     build:
         uses: ./.github/workflows/publish-code.yml
         secrets: inherit
+        needs: hotfix-validate
 
     unit-test:
         uses: ./.github/workflows/unit-test.yml
         secrets: inherit
+        needs: hotfix-validate
 
     pp-deploy:
         uses: ./.github/workflows/deploy-environment.yml
