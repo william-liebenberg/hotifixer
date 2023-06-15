@@ -13,7 +13,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - run: |
-                $branchName = $env:GITHUB_HEAD_REF
+                $branchName = $env:GITHUB_REF_NAME
                 Write-host "Your branch is $($branchName)..."
                 if(-not($branchName.StartsWith('hotfix/','CurrentCultureIgnoreCase'))) {
                     Write-Host "Cannot start the Hotfix process - your branch must start with 'hotfix/'"
