@@ -3,12 +3,23 @@ name: Hotfix (PP to Prod)
 on:
     workflow_dispatch:
 
+defaults:
+    run:
+        shell: pwsh
+
 jobs:
     hotfix-validate:
-        if: startsWith(github.head_ref, 'hotfix/')
+        ##f: startsWith(github.head_ref, 'hotfix/')
         runs-on: ubuntu-latest
+        env:
+            BRANCH: ${{ github.head_ref }}
         steps:
-            - run: echo "Ensuring that you are following the hotfix process..."
+            - run: |
+                $branchName = $env.BRANCH;
+                if(-not($branchName.StartsWith('hotfix/','CurrentCultureIgnoreCase'))) {
+                    Write-Host "Your branch '$($branchName)' must start with 'hotfix/'";
+                    exit 1;
+                }
     
     build:
         uses: ./.github/workflows/publish-code.yml
