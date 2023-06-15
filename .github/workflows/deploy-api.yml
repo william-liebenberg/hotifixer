@@ -19,10 +19,10 @@ jobs:
   deploy-apis:
     runs-on: ubuntu-latest
     environment: ${{inputs.environment}}
-    env:
-      CLIENT_ID: ${{secrets.CLIENT_ID}}
-      SUBSCRIPTION_ID: ${{secrets.SUBSCRIPTION_ID }}
-      TENANT_ID: ${{secrets.TENANT_ID}}
+    # env:
+    #   CLIENT_ID: ${{secrets.CLIENT_ID}}
+    #   SUBSCRIPTION_ID: ${{secrets.SUBSCRIPTION_ID }}
+    #   TENANT_ID: ${{secrets.TENANT_ID}}
       
   
     steps:
