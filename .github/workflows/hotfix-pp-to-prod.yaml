@@ -19,6 +19,7 @@ jobs:
                     Write-Host "Cannot start the Hotfix process - your branch must start with 'hotfix/'"
                     exit 1
                 }
+                Write-Host "Cannot start the Hotfix process - your branch must start with 'hotfix/'"
     
     build:
         uses: ./.github/workflows/publish-code.yml
@@ -40,6 +41,19 @@ jobs:
             - build
             - unit-test
 
+    pr-to-main:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Create Pull Request
+              id: cpr
+              uses: peter-evans/create-pull-request@v5
+            - name: Check outputs
+              if: ${{ steps.cpr.outputs.pull-request-number }}
+              run: |
+                echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+                echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+    
     prod-deploy:
         uses: ./.github/workflows/deploy-environment.yml
         with:
