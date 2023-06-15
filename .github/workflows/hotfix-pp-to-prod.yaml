@@ -11,15 +11,13 @@ jobs:
     hotfix-validate:
         ##f: startsWith(github.head_ref, 'hotfix/')
         runs-on: ubuntu-latest
-        env:
-            BRANCH: ${{ github.head_ref }}
         steps:
             - run: |
-                $branchName = $env:BRANCH;
+                $branchName = $env:GITHUB_HEAD_REF
                 Write-host "Your branch is $($branchName)..."
                 if(-not($branchName.StartsWith('hotfix/','CurrentCultureIgnoreCase'))) {
-                    Write-Host "Cannot start the Hotfix process - your branch must start with 'hotfix/'";
-                    exit 1;
+                    Write-Host "Cannot start the Hotfix process - your branch must start with 'hotfix/'"
+                    exit 1
                 }
     
     build:
