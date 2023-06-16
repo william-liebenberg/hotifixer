@@ -50,13 +50,14 @@ jobs:
       - unit-test
     steps:
       - uses: actions/checkout@v3
+
       - name: create pull request
         run: |
           gh pr create -B $env:BASE_BRANCH -H $env:CURRENT_BRANCH `
               --title "Hotfix PR $($env:CURRENT_BRANCH) into $($env:BASE_BRANCH)" `
               --body "Created by Hotfix workflow"
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BASE_BRANCH: 'main'
           CURRENT_BRANCH: ${{ github.ref_name }}
   
