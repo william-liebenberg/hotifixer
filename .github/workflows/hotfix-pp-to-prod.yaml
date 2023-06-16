@@ -53,8 +53,8 @@ jobs:
       - name: create pull request
         run: |
           gh pr create -B $env:BASE_BRANCH -H $env:CURRENT_BRANCH `
-              --title 'Hotfix Merge $($env:CURRENT_BRANCH) into $($env:BASE_BRANCH)' `
-              --body 'Created by Hotfix workflow'
+              --title "Hotfix PR $($env:CURRENT_BRANCH) into $($env:BASE_BRANCH)" `
+              --body "Created by Hotfix workflow"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           BASE_BRANCH: 'main'
