@@ -61,12 +61,20 @@ jobs:
         run: write-host "Approve for $($env.ENV_NAME)"
     needs:
       - pp-deploy
+  
+  prod-deploy:
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      environment: prod
+      use_approval_gate: false
+    secrets: inherit
+    needs:
+      - prod-hotfix-approval-gate
 
   pr-to-main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: create pull request
         run: |
           gh pr create -B $env:BASE_BRANCH -H $env:CURRENT_BRANCH `
@@ -77,13 +85,4 @@ jobs:
           BASE_BRANCH: 'main'
           CURRENT_BRANCH: ${{ github.ref_name }}
     needs: 
-      - prod-hotfix-approval-gate
-  
-  prod-deploy:
-    uses: ./.github/workflows/deploy-environment.yml
-    with:
-      environment: prod
-      use_approval_gate: false
-    secrets: inherit
-    needs:
-      - prod-hotfix-approval-gate
+      - prod-deploy

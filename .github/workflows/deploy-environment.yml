@@ -53,6 +53,7 @@ jobs:
       - approval-gate
         
   deploy-api:
+    if: ${{ always() && (needs.approval-gate.result == 'success' || needs.approval-gate.result == 'skipped') }}
     concurrency:
         cancel-in-progress: false
         group: ${{ inputs.environment }}-deploy-api
@@ -64,6 +65,7 @@ jobs:
         - approval-gate
 
   deploy-functions:
+    if: ${{ always() && (needs.approval-gate.result == 'success' || needs.approval-gate.result == 'skipped') }}
     concurrency:
         cancel-in-progress: false
         group: ${{ inputs.environment }}-deploy-function
