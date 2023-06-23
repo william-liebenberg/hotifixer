@@ -38,15 +38,19 @@ jobs:
         run: write-host "Approve for $($env.ENV_NAME)"
 
   deploy-ui:
-      concurrency:
-        cancel-in-progress: false
-        group: ${{ inputs.environment }}-deploy-ui
-      uses: ./.github/workflows/deploy-ui.yml
-      with:
-        environment: ${{ inputs.environment }}
-      secrets: inherit
-      needs: 
-        - approval-gate
+    # since we have an optional approval gate, shortcut the 'needs' of this job using 'always()' 
+    # if the approval gate was not required for this run, then we still want to run this step if the approval gate was skipped
+    # if the approval gate was required for this run, then only run this job if the approval was completed successfully
+    if: ${{ always() && (needs.approval-gate.result == 'success' || needs.approval-gate.result == 'skipped') }}
+    concurrency:
+      cancel-in-progress: false
+      group: ${{ inputs.environment }}-deploy-ui
+    uses: ./.github/workflows/deploy-ui.yml
+    with:
+      environment: ${{ inputs.environment }}
+    secrets: inherit
+    needs: 
+      - approval-gate
         
   deploy-api:
     concurrency:
