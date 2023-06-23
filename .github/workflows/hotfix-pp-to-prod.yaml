@@ -78,7 +78,7 @@ jobs:
       - name: create pull request
         run: |
           gh pr create -B $env:BASE_BRANCH -H $env:CURRENT_BRANCH `
-              --body-file ./github/hotfix_pull_request_template.md `
+              --body-file ./.github/hotfix_pull_request_template.md `
               --title "Hotfix PR $($env:CURRENT_BRANCH) into $($env:BASE_BRANCH)" `
               --label "Hotfix"
         env:
