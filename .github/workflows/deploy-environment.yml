@@ -3,8 +3,8 @@ name: "Deploy-Environment"
 on:
   workflow_call:
     inputs: 
-      requires_deployment_approval:
-        description: "Requires approval before running deployment steps"
+      use_approval_gate:
+        description: "Use an approval before running deployment steps"
         required: false
         default: true
         type: boolean
@@ -25,7 +25,7 @@ defaults:
 jobs:
   
   approval-gate:
-    if: ${{ inputs.requires_deployment_approval }}
+    if: ${{ inputs.use_approval_gate }}
     runs-on: ubuntu-latest
     environment: "${{ inputs.environment }}-approval"
     concurrency:

@@ -32,10 +32,7 @@ jobs:
 
   pp-hotfix-approval-gate:
     runs-on: ubuntu-latest
-    environment: "pp-approval"
-    concurrency:
-      cancel-in-progress: true
-      group: pp-approval
+    environment: "pp-hotfix-approval"
     steps:
       - name: approved
         env: 
@@ -46,16 +43,14 @@ jobs:
     uses: ./.github/workflows/deploy-environment.yml
     with:
       environment: pp
+      use_approval_gate: false
     secrets: inherit
     needs:
       - pp-hotfix-approval-gate
 
   prod-hotfix-approval-gate:
     runs-on: ubuntu-latest
-    environment: "prod-approval"
-    concurrency:
-      cancel-in-progress: true
-      group: prod-approval
+    environment: "prod-hotfix-approval"
     steps:
       - name: approved
         env: 
@@ -84,7 +79,7 @@ jobs:
     uses: ./.github/workflows/deploy-environment.yml
     with:
       environment: prod
-      requires_deployment_approval: false
+      use_approval_gate: false
     secrets: inherit
     needs:
       - prod-hotfix-approval-gate
