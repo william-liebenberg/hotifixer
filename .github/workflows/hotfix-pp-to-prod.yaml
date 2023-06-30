@@ -80,7 +80,7 @@ jobs:
           gh pr create -B $env:BASE_BRANCH -H $env:CURRENT_BRANCH `
               -body-file ./github/hotfix_pull_request_template.md `
               --title "Hotfix PR $($env:CURRENT_BRANCH) into $($env:BASE_BRANCH)" `
-              --label "Hotfix"
+              --label "hotfix"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BASE_BRANCH: 'main'
